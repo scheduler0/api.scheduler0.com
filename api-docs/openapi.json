@@ -29,6 +29,10 @@
     {
       "name": "Executors",
       "description": "Executors are the different types of executors that can be used to execute jobs"
+    },
+    {
+      "name": "AsyncTasks",
+      "description": "AsyncTasks are tasks that are executed asynchronously"
     }
   ],
   "paths": {
@@ -42,6 +46,11 @@
           "ApiKeyAuth": [],
           "ApiSecretAuth": []
         }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          }
+        ],
         "description": "Credentials required for client applications / sdk that want to access scheduler0 api",
         "operationId": "Credentials.get",
         "responses": {
@@ -74,6 +83,11 @@
           "ApiKeyAuth": [],
           "ApiSecretAuth": []
         }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          }
+        ],
         "summary": "Create a new credential",
         "operationId": "Credentials.post",
         "requestBody": {
@@ -95,6 +109,15 @@
           },
           "201": {
             "description": "successfully created a credential",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -111,6 +134,14 @@
         "tags": [
           "Credentials"
         ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          },
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
         "summary": "Get one credential",
         "security": [{
           "ApiKeyAuth": [],
@@ -118,11 +149,6 @@
         }],
         "description": "Credentials required for client applications / sdk that want to access scheduler0 api",
         "operationId": "Credentials.getOne",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/id"
-          }
-        ],
         "responses": {
           "401": {
             "$ref": "#/components/responses/401"
@@ -149,17 +175,20 @@
         "tags": [
           "Credentials"
         ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          },
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
         "security": [{
           "ApiKeyAuth": [],
           "ApiSecretAuth": []
         }],
         "summary": "update an existing credential",
         "operationId": "Credentials.put",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/id"
-          }
-        ],
         "requestBody": {
           "description": "request body to update a credential",
           "required": true,
@@ -179,6 +208,15 @@
           },
           "200": {
             "description": "successfully updated credential",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -192,6 +230,11 @@
       "delete": {
         "tags": [
           "Credentials"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          }
         ],
         "summary": "Delete one credential",
         "security": [{
@@ -211,7 +254,16 @@
             "$ref": "#/components/responses/404"
           },
           "204": {
-            "description": "successfully deleted a single credential"
+            "description": "successfully deleted a single credential",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            }
           }
         }
       }
@@ -220,6 +272,11 @@
       "get": {
         "tags": [
           "Executions"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          }
         ],
         "summary": "Get all stats for jobs that have been executed",
         "security": [{
@@ -318,6 +375,15 @@
           },
           "201": {
             "description": "successfully created a single executor",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -405,6 +471,15 @@
           },
           "200": {
             "description": "successfully updated a single executor",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -441,7 +516,16 @@
             "$ref": "#/components/responses/404"
           },
           "204": {
-            "description": "successfully deleted a single executor"
+            "description": "successfully deleted a single executor",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            }
           }
         }
       }
@@ -512,6 +596,15 @@
           },
           "201": {
             "description": "successfully created a single project",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -599,6 +692,15 @@
           },
           "200": {
             "description": "successfully updated a single project",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -635,7 +737,16 @@
             "$ref": "#/components/responses/404"
           },
           "204": {
-            "description": "successfully deleted a single project"
+            "description": "successfully deleted a single project",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            }
           }
         }
       }
@@ -708,6 +819,15 @@
           },
           "200": {
             "description": "successfully created a job",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -795,6 +915,15 @@
           },
           "200": {
             "description": "successfully updated a project",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -831,7 +960,16 @@
             "$ref": "#/components/responses/404"
           },
           "204": {
-            "description": "successfully deleted a project"
+            "description": "successfully deleted a project",
+            "headers": {
+              "Location": {
+                "description": "URL to check the status of the async task",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
+                }
+              }
+            }
           }
         }
       }
@@ -972,6 +1110,52 @@
           }
         }
       }
+    },
+    "/async-tasks/{requestId}": {
+      "get": {
+        "tags": [
+          "AsyncTasks"
+        ],
+        "summary": "Get a single async task",
+        "security": [{
+          "ApiKeyAuth": [],
+          "ApiSecretAuth": []
+        }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          },
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "200": {
+            "description": "successfully returned async task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncTaskResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -983,6 +1167,15 @@
         },
         "in": "path",
         "required": true
+      },
+      "accountId": {
+        "name": "accountId",
+        "in": "header",
+        "description": "The account ID for the request",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
       }
     },
     "securitySchemes": {
@@ -1532,6 +1725,78 @@
             "items": {
               "type": "object",
               "$ref": "#/components/schemas/Project"
+            }
+          }
+        }
+      },
+      "AsyncTaskState": {
+        "type": "integer",
+        "enum": [0, 1, 2, 3],
+        "description": "State of the async task (0: Not Started, 1: In Progress, 2: Success, 3: Fail)"
+      },
+      "AsyncTask": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "uint64"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "input": {
+            "type": "string"
+          },
+          "output": {
+            "type": "string"
+          },
+          "service": {
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/AsyncTaskState"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AsyncTaskResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AsyncTask"
+          }
+        }
+      },
+      "PaginatedAsyncTasksResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "number"
+              },
+              "offset": {
+                "type": "number"
+              },
+              "limit": {
+                "type": "number"
+              },
+              "asyncTasks": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AsyncTask"
+                }
+              }
             }
           }
         }
