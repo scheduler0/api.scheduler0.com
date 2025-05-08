@@ -36,7 +36,7 @@
     }
   ],
   "paths": {
-    "/credentials": {
+    "/api/v1/credentials": {
       "get": {
         "tags": [
           "Credentials"
@@ -109,15 +109,6 @@
           },
           "201": {
             "description": "successfully created a credential",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
@@ -129,7 +120,7 @@
         }
       }
     },
-    "/credentials/:id": {
+    "/api/v1/credentials/:id": {
       "get": {
         "tags": [
           "Credentials"
@@ -208,15 +199,6 @@
           },
           "200": {
             "description": "successfully updated credential",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
@@ -254,21 +236,12 @@
             "$ref": "#/components/responses/404"
           },
           "204": {
-            "description": "successfully deleted a single credential",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            }
+            "description": "successfully deleted a single credential"
           }
         }
       }
     },
-    "/executions": {
+    "/api/v1/executions": {
       "get": {
         "tags": [
           "Executions"
@@ -308,7 +281,7 @@
         }
       }
     },
-    "/executors": {
+    "/api/v1/executors": {
       "get": {
         "tags": [
           "Executors"
@@ -375,15 +348,6 @@
           },
           "201": {
             "description": "successfully created a single executor",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
@@ -395,7 +359,7 @@
         }
       }
     },
-    "/executors/:id": {
+    "/api/v1/executors/:id": {
       "get": {
         "tags": [
           "Executors"
@@ -471,15 +435,6 @@
           },
           "200": {
             "description": "successfully updated a single executor",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
@@ -516,21 +471,12 @@
             "$ref": "#/components/responses/404"
           },
           "204": {
-            "description": "successfully deleted a single executor",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            }
+            "description": "successfully deleted a single executor"
           }
         }
       }
     },
-    "/projects": {
+    "/api/v1/projects": {
       "get": {
         "tags": [
           "Projects"
@@ -596,15 +542,6 @@
           },
           "201": {
             "description": "successfully created a single project",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
@@ -616,7 +553,7 @@
         }
       }
     },
-    "/projects/:id": {
+    "/api/v1/projects/:id": {
       "get": {
         "tags": [
           "Projects"
@@ -692,15 +629,6 @@
           },
           "200": {
             "description": "successfully updated a single project",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
@@ -737,21 +665,12 @@
             "$ref": "#/components/responses/404"
           },
           "204": {
-            "description": "successfully deleted a single project",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            }
+            "description": "successfully deleted a single project"
           }
         }
       }
     },
-    "/jobs": {
+    "/api/v1/jobs": {
       "get": {
         "tags": [
           "Jobs"
@@ -839,7 +758,7 @@
         }
       }
     },
-    "/jobs/:id": {
+    "/api/v1/jobs/:id": {
       "get": {
         "tags": [
           "Jobs"
@@ -915,15 +834,6 @@
           },
           "200": {
             "description": "successfully updated a project",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
@@ -960,21 +870,12 @@
             "$ref": "#/components/responses/404"
           },
           "204": {
-            "description": "successfully deleted a project",
-            "headers": {
-              "Location": {
-                "description": "URL to check the status of the async task",
-                "schema": {
-                  "type": "string",
-                  "pattern": "^/async-tasks/[a-zA-Z0-9-]+$"
-                }
-              }
-            }
+            "description": "successfully deleted a project"
           }
         }
       }
     },
-    "/healthcheck": {
+    "/api/v1/healthcheck": {
       "get": {
         "summary": "Healthcheck Endpoint",
         "description": "Returns current leader and raft stats.",
@@ -1111,7 +1012,7 @@
         }
       }
     },
-    "/async-tasks/{requestId}": {
+    "/api/v1/async-tasks/{requestId}": {
       "get": {
         "tags": [
           "AsyncTasks"
@@ -1169,7 +1070,7 @@
         "required": true
       },
       "accountId": {
-        "name": "accountId",
+        "name": "x-account-id",
         "in": "header",
         "description": "The account ID for the request",
         "required": true,
@@ -1182,12 +1083,12 @@
       "ApiKeyAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "X-API-Key"
+        "name": "x-api-key"
       },
       "ApiSecretAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "X-API-Secret"
+        "name": "x-api-secret"
       }
     },
     "schemas": {
