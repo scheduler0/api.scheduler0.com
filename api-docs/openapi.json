@@ -49,6 +49,12 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/accountId"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
           }
         ],
         "description": "Credentials required for client applications / sdk that want to access scheduler0 api",
@@ -94,7 +100,11 @@
           "description": "request body to create a new credentials",
           "required": true,
           "content": {
-            "application/json:": {}
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CredentialCreateRequestBody"
+              }
+            }
           }
         },
         "responses": {
@@ -184,7 +194,11 @@
           "description": "request body to update a credential",
           "required": true,
           "content": {
-            "application/json:": {}
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CredentialUpdateRequestBody"
+              }
+            }
           }
         },
         "responses": {
@@ -249,6 +263,12 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/accountId"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
           }
         ],
         "summary": "Get all stats for jobs that have been executed",
@@ -291,6 +311,17 @@
           "ApiKeyAuth": [],
           "ApiSecretAuth": []
         }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
         "description": "this endpoint returns a collection containing basic information about the different types of executors that can be used to execute jobs",
         "operationId": "Executors.get",
         "responses": {
@@ -329,9 +360,9 @@
           "description": "request body to create an executor",
           "required": true,
           "content": {
-            "application/json:": {
+            "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExecutorRequestBody"
+                "$ref": "#/components/schemas/ExecutorCreateRequestBody"
               }
             }
           }
@@ -416,9 +447,9 @@
           "description": "request body to update a executor",
           "required": true,
           "content": {
-            "application/json:": {
+            "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExecutorRequestBody"
+                "$ref": "#/components/schemas/ExecutorUpdateRequestBody"
               }
             }
           }
@@ -485,6 +516,17 @@
           "ApiKeyAuth": [],
           "ApiSecretAuth": []
         }],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
         "summary": "Get all projects but in a paginated style",
         "operationId": "Projects.get",
         "responses": {
@@ -523,9 +565,9 @@
           "description": "request body to create a project",
           "required": true,
           "content": {
-            "application/json:": {
+            "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectRequestBody"
+                "$ref": "#/components/schemas/ProjectCreateRequestBody"
               }
             }
           }
@@ -610,7 +652,7 @@
           "description": "request body to update a project",
           "required": true,
           "content": {
-            "application/json:": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ProjectUpdateRequestBody"
               }
@@ -679,7 +721,17 @@
           "ApiKeyAuth": [],
           "ApiSecretAuth": []
         }],
-        "parameters": [],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/accountId"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          }
+        ],
         "summary": "Get all jobs but in a paginated style",
         "operationId": "Jobs.get",
         "responses": {
@@ -719,9 +771,9 @@
           "description": "request body to create a job",
           "required": true,
           "content": {
-            "application/json:": {
+            "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JobRequestBody"
+                "$ref": "#/components/schemas/JobCreateRequestBody"
               }
             }
           }
@@ -815,7 +867,7 @@
           "description": "request body to update a job",
           "required": true,
           "content": {
-            "application/json:": {
+            "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/JobUpdateRequestBody"
               }
@@ -1077,6 +1129,29 @@
         "schema": {
           "type": "string"
         }
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "description": "Maximum number of items to return",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        }
+      },
+      "offset": {
+        "name": "offset",
+        "in": "query",
+        "description": "Number of items to skip",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        }
       }
     },
     "securitySchemes": {
@@ -1088,7 +1163,7 @@
       "ApiSecretAuth": {
         "type": "apiKey",
         "in": "header",
-        "name": "x-api-secret"
+        "name": "x-secret-key"
       }
     },
     "schemas": {
@@ -1130,6 +1205,22 @@
           },
           "deletedBy": {
             "type": "string"
+          }
+        }
+      },
+      "CredentialCreateRequestBody": {
+        "type": "object",
+        "properties": {
+          "archived": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CredentialUpdateRequestBody": {
+        "type": "object",
+        "properties": {
+          "archived": {
+            "type": "boolean"
           }
         }
       },
@@ -1283,12 +1374,9 @@
           }
         }
       },
-      "ExecutorRequestBody": {
+      "ExecutorCreateRequestBody": {
         "type": "object",
         "properties": {
-          "accountId": {
-            "type": "string"
-          },
           "name": {
             "type": "string",
             "description": "name of the executor"
@@ -1317,7 +1405,43 @@
             "description": "the path to the file to be executed"
           },
           "cloudResourceUrl": {
-            "type": "number",
+            "type": "string",
+            "description": "the version of the execution that was executed"
+          }
+        }
+      },
+      "ExecutorUpdateRequestBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name of the executor"
+          },
+          "type": {
+            "type": "string",
+            "description": "type of the executor (cloud_function, container, script_or_file, webhook_url, custom)",
+            "enum": [
+              "cloud_function",
+              "container",
+              "file",
+              "webhook_url",
+              "custom"
+            ]
+          },
+          "region": {
+            "type": "string",
+            "description": "the cloud region in which the executor is located"
+          },
+          "cloudProvider": {
+            "type": "string",
+            "description": "the cloud provider in which the executor is located"
+          },
+          "filePath": {
+            "type": "string",
+            "description": "the path to the file to be executed"
+          },
+          "cloudResourceUrl": {
+            "type": "string",
             "description": "the version of the execution that was executed"
           }
         }
@@ -1384,41 +1508,7 @@
           }
         }
       },
-      "JobResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "object",
-            "$ref": "#/components/schemas/Job"
-          }
-        }
-      },
-      "JobUpdateRequestBody": {
-        "type": "object",
-        "properties": {
-          "projectId": {
-            "type": "string",
-            "description": "project id in which job belongs too"
-          },
-          "spec": {
-            "type": "string",
-            "description": "Spec can be a cron tab e.g (0 30 * * * *)  or pre-defined values like (@hourly, @daily, @midnight, @weekly, @monthly, @yearly, @annually) or intervals @every <duration> for example (@every 1h30m10s)"
-          },
-
-          "callbackUrl": {
-            "type": "string",
-            "description": "URL in which job would execute"
-          },
-          "executorId": {
-            "type": "string",
-            "description": "the id for the job executor"
-          }
-        }
-      },
-      "JobRequestBody": {
+      "JobCreateRequestBody": {
         "type": "object",
         "properties": {
           "description": {
@@ -1439,6 +1529,43 @@
           "executorId": {
             "type": "string",
             "description": "the id for the job executor"
+          },
+          "spec": {
+            "type": "string",
+            "description": "Spec can be a cron tab e.g (0 30 * * * *)  or pre-defined values like (@hourly, @daily, @midnight, @weekly, @monthly, @yearly, @annually) or intervals @every <duration> for example (@every 1h30m10s)"
+          }
+        }
+      },
+      "JobUpdateRequestBody": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "project id in which job belongs too"
+          },
+          "spec": {
+            "type": "string",
+            "description": "Spec can be a cron tab e.g (0 30 * * * *)  or pre-defined values like (@hourly, @daily, @midnight, @weekly, @monthly, @yearly, @annually) or intervals @every <duration> for example (@every 1h30m10s)"
+          },
+          "callbackUrl": {
+            "type": "string",
+            "description": "URL in which job would execute"
+          },
+          "executorId": {
+            "type": "string",
+            "description": "the id for the job executor"
+          }
+        }
+      },
+      "JobResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "$ref": "#/components/schemas/Job"
           }
         }
       },
@@ -1462,7 +1589,7 @@
           }
         }
       },
-      "ProjectRequestBody": {
+      "ProjectCreateRequestBody": {
         "type": "object",
         "properties": {
           "name": {
