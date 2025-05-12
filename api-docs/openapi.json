@@ -55,6 +55,27 @@
           },
           {
             "$ref": "#/components/parameters/offset"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "Field to order results by",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["date_created", "date_modified", "created_by", "modified_by", "deleted_by"]
+            }
+          },
+          {
+            "name": "orderByDirection",
+            "in": "query",
+            "description": "Direction to order results by",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"],
+              "default": "desc"
+            }
           }
         ],
         "description": "Credentials required for client applications / sdk that want to access scheduler0 api",
@@ -730,6 +751,15 @@
           },
           {
             "$ref": "#/components/parameters/offset"
+          },
+          {
+            "name": "projectId",
+            "in": "query",
+            "description": "ID of the project to list jobs for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "summary": "Get all jobs but in a paginated style",
@@ -1509,30 +1539,39 @@
         }
       },
       "JobCreateRequestBody": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string"
-          },
-          "timezone": {
-            "type": "string"
-          },
-          "callbackUrl": {
-            "type": "string"
-          },
-          "startDate": {
-            "type": "string"
-          },
-          "endDate": {
-            "type": "string"
-          },
-          "executorId": {
-            "type": "string",
-            "description": "the id for the job executor"
-          },
-          "spec": {
-            "type": "string",
-            "description": "Spec can be a cron tab e.g (0 30 * * * *)  or pre-defined values like (@hourly, @daily, @midnight, @weekly, @monthly, @yearly, @annually) or intervals @every <duration> for example (@every 1h30m10s)"
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["projectId", "timezone"],
+          "properties": {
+            "projectId": {
+              "type": "string",
+              "description": "project id in which job belongs too"
+            },
+            "description": {
+              "type": "string"
+            },
+            "timezone": {
+              "type": "string",
+              "description": "The timezone for the job (e.g., 'UTC', 'America/New_York')"
+            },
+            "callbackUrl": {
+              "type": "string"
+            },
+            "startDate": {
+              "type": "string"
+            },
+            "endDate": {
+              "type": "string"
+            },
+            "executorId": {
+              "type": "string",
+              "description": "the id for the job executor"
+            },
+            "spec": {
+              "type": "string",
+              "description": "Spec can be a cron tab e.g (0 30 * * * *)  or pre-defined values like (@hourly, @daily, @midnight, @weekly, @monthly, @yearly, @annually) or intervals @every <duration> for example (@every 1h30m10s)"
+            }
           }
         }
       },
