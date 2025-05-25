@@ -1346,13 +1346,11 @@
           },
           "type": {
             "type": "string",
-            "description": "type of the executor (cloud_function, container, script_or_file, webhook_url, custom)",
+            "description": "type of the executor (cloud_function, container, webhook_url)",
             "enum": [
               "cloud_function",
               "container",
-              "file",
-              "webhook_url",
-              "custom"
+              "webhook_url"
             ]
           },
           "region": {
@@ -1363,13 +1361,46 @@
             "type": "string",
             "description": "the cloud provider in which the executor is located"
           },
-          "filePath": {
-            "type": "string",
-            "description": "the path to the file to be executed"
-          },
           "cloudResourceUrl": {
             "type": "string",
             "description": "the version of the execution that was executed"
+          },
+          "cloudApiKey": {
+            "type": "string",
+            "description": "API key for cloud provider authentication"
+          },
+          "cloudApiSecret": {
+            "type": "string",
+            "description": "API secret for cloud provider authentication"
+          },
+          "webhookUrl": {
+            "type": "string",
+            "description": "URL for webhook execution"
+          },
+          "webhookSecret": {
+            "type": "string",
+            "description": "Secret for webhook authentication"
+          },
+          "webhookMethod": {
+            "type": "string",
+            "description": "HTTP method for webhook execution",
+            "enum": ["GET", "POST", "PUT", "DELETE"]
+          },
+          "webhookHeaders": {
+            "type": "string",
+            "description": "Headers for webhook execution"
+          },
+          "webhookBody": {
+            "type": "string",
+            "description": "Body for webhook execution"
+          },
+          "webhookTimeout": {
+            "type": "integer",
+            "description": "Timeout in seconds for webhook execution"
+          },
+          "webhookRetries": {
+            "type": "integer",
+            "description": "Number of retries for webhook execution"
           },
           "dateCreated": {
             "type": "string"
@@ -1413,13 +1444,11 @@
           },
           "type": {
             "type": "string",
-            "description": "type of the executor (cloud_function, container, script_or_file, webhook_url, custom)",
+            "description": "type of the executor (cloud_function, container, webhook_url)",
             "enum": [
               "cloud_function",
               "container",
-              "file",
-              "webhook_url",
-              "custom"
+              "webhook_url"
             ]
           },
           "region": {
@@ -1430,13 +1459,46 @@
             "type": "string",
             "description": "the cloud provider in which the executor is located"
           },
-          "filePath": {
-            "type": "string",
-            "description": "the path to the file to be executed"
-          },
           "cloudResourceUrl": {
             "type": "string",
             "description": "the version of the execution that was executed"
+          },
+          "cloudApiKey": {
+            "type": "string",
+            "description": "API key for cloud provider authentication"
+          },
+          "cloudApiSecret": {
+            "type": "string",
+            "description": "API secret for cloud provider authentication"
+          },
+          "webhookUrl": {
+            "type": "string",
+            "description": "URL for webhook execution"
+          },
+          "webhookSecret": {
+            "type": "string",
+            "description": "Secret for webhook authentication"
+          },
+          "webhookMethod": {
+            "type": "string",
+            "description": "HTTP method for webhook execution",
+            "enum": ["GET", "POST", "PUT", "DELETE"]
+          },
+          "webhookHeaders": {
+            "type": "string",
+            "description": "Headers for webhook execution"
+          },
+          "webhookBody": {
+            "type": "string",
+            "description": "Body for webhook execution"
+          },
+          "webhookTimeout": {
+            "type": "integer",
+            "description": "Timeout in seconds for webhook execution"
+          },
+          "webhookRetries": {
+            "type": "integer",
+            "description": "Number of retries for webhook execution"
           }
         }
       },
@@ -1449,13 +1511,11 @@
           },
           "type": {
             "type": "string",
-            "description": "type of the executor (cloud_function, container, script_or_file, webhook_url, custom)",
+            "description": "type of the executor (cloud_function, container, webhook_url)",
             "enum": [
               "cloud_function",
               "container",
-              "file",
-              "webhook_url",
-              "custom"
+              "webhook_url"
             ]
           },
           "region": {
@@ -1466,13 +1526,46 @@
             "type": "string",
             "description": "the cloud provider in which the executor is located"
           },
-          "filePath": {
-            "type": "string",
-            "description": "the path to the file to be executed"
-          },
           "cloudResourceUrl": {
             "type": "string",
             "description": "the version of the execution that was executed"
+          },
+          "cloudApiKey": {
+            "type": "string",
+            "description": "API key for cloud provider authentication"
+          },
+          "cloudApiSecret": {
+            "type": "string",
+            "description": "API secret for cloud provider authentication"
+          },
+          "webhookUrl": {
+            "type": "string",
+            "description": "URL for webhook execution"
+          },
+          "webhookSecret": {
+            "type": "string",
+            "description": "Secret for webhook authentication"
+          },
+          "webhookMethod": {
+            "type": "string",
+            "description": "HTTP method for webhook execution",
+            "enum": ["GET", "POST", "PUT", "DELETE"]
+          },
+          "webhookHeaders": {
+            "type": "string",
+            "description": "Headers for webhook execution"
+          },
+          "webhookBody": {
+            "type": "string",
+            "description": "Body for webhook execution"
+          },
+          "webhookTimeout": {
+            "type": "integer",
+            "description": "Timeout in seconds for webhook execution"
+          },
+          "webhookRetries": {
+            "type": "integer",
+            "description": "Number of retries for webhook execution"
           }
         }
       },
