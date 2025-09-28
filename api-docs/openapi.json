@@ -3,13 +3,17 @@
   "info": {
     "title": "Scheduler0",
     "version": "1",
-    "description": "REST API documentation for the Scheduler0 http server",
+    "description": "REST API documentation for the Scheduler0 http server\n\n## Authentication Methods\n\n### 1. API Key + Secret Authentication (Default)\nMost endpoints require API Key and Secret authentication:\n- `X-API-Key`: Your API key\n- `X-Secret-Key`: Your API secret\n- `X-Account-ID`: Your account ID (required for most endpoints)\n\n### 2. Basic Authentication (Peer Communication)\nPeer-to-peer communication uses Basic Authentication:\n- Username and password from scheduler0 configuration\n- `X-Peer` header with value 'cmd' or 'peer'\n\n### 3. No Authentication\n- `/api/v1/healthcheck` - Health check endpoint\n\n## Account ID Requirements\n\nThe following endpoints require the `X-Account-ID` header:\n- `/api/v1/jobs/*`\n- `/api/v1/projects/*`\n- `/api/v1/credentials/*`\n- `/api/v1/executors/*`\n- `/api/v1/async-tasks/*`\n- `/api/v1/executions`\n\nAccount endpoints (`/api/v1/accounts/*`) and features (`/api/v1/features`) do not require account ID.",
     "contact": {
       "name": "Support",
       "email": "support@scheduler0.com"
     }
   },
   "tags": [
+    {
+      "name": "Accounts",
+      "description": "Accounts are the main entities that own projects, jobs, and other resources"
+    },
     {
       "name": "Credentials",
       "description": "Credentials are used to authenticate client applications / sdk that want to access scheduler0 api"
@@ -29,6 +33,10 @@
     {
       "name": "Executors",
       "description": "Executors are the different types of executors that can be used to execute jobs"
+    },
+    {
+      "name": "Features",
+      "description": "Features are capabilities that can be enabled for accounts"
     },
     {
       "name": "AsyncTasks",
@@ -276,6 +284,217 @@
         }
       }
     },
+    "/api/v1/accounts": {
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "security": [{
+          "ApiKeyAuth": [],
+          "ApiSecretAuth": []
+        }],
+        "summary": "Create a new account",
+        "operationId": "Accounts.post",
+        "requestBody": {
+          "description": "request body to create a new account",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountCreateRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "201": {
+            "description": "successfully created an account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/{id}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "security": [{
+          "ApiKeyAuth": [],
+          "ApiSecretAuth": []
+        }],
+        "summary": "Get one account",
+        "operationId": "Accounts.getOne",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "description": "Get account details including features",
+        "responses": {
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "200": {
+            "description": "successfully returned account details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/{id}/feature": {
+      "put": {
+        "tags": [
+          "Accounts"
+        ],
+        "security": [{
+          "ApiKeyAuth": [],
+          "ApiSecretAuth": []
+        }],
+        "summary": "Add feature to account",
+        "operationId": "Accounts.addFeature",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "description": "request body to add feature to account",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "201": {
+            "description": "successfully added feature to account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Accounts"
+        ],
+        "security": [{
+          "ApiKeyAuth": [],
+          "ApiSecretAuth": []
+        }],
+        "summary": "Remove feature from account",
+        "operationId": "Accounts.removeFeature",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "description": "request body to remove feature from account",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "204": {
+            "description": "successfully removed feature from account"
+          }
+        }
+      }
+    },
+    "/api/v1/features": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "security": [{
+          "ApiKeyAuth": [],
+          "ApiSecretAuth": []
+        }],
+        "summary": "Get all available features",
+        "operationId": "Features.get",
+        "description": "Returns a list of all available features in the system",
+        "responses": {
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "200": {
+            "description": "successfully returned features",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeaturesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/executions": {
       "get": {
         "tags": [
@@ -286,20 +505,63 @@
             "$ref": "#/components/parameters/accountId"
           },
           {
+            "name": "startDate",
+            "in": "query",
+            "description": "Start date for filtering execution logs (RFC3339 format)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "End date for filtering execution logs (RFC3339 format)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "projectId",
+            "in": "query",
+            "description": "Filter by project ID",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "jobId",
+            "in": "query",
+            "description": "Filter by job ID",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
             "$ref": "#/components/parameters/limit"
           },
           {
             "$ref": "#/components/parameters/offset"
           }
         ],
-        "summary": "Get all stats for jobs that have been executed",
+        "summary": "Get job execution logs",
         "security": [{
           "ApiKeyAuth": [],
           "ApiSecretAuth": []
         }],
-        "description": "this endpoint returns a collection containing basic information about jobs that have been executed",
+        "description": "Returns execution logs for jobs within a specified date range. Requires startDate and endDate parameters in RFC3339 format. Optionally filter by projectId and jobId.",
         "operationId": "Executions.get",
         "responses": {
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -327,7 +589,7 @@
         "tags": [
           "Executors"
         ],
-        "summary": "scheduled job executor types",
+        "summary": "List job executors",
         "security": [{
           "ApiKeyAuth": [],
           "ApiSecretAuth": []
@@ -341,11 +603,36 @@
           },
           {
             "$ref": "#/components/parameters/offset"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "Field to order results by",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["date_created", "date_modified", "created_by", "modified_by", "deleted_by"],
+              "default": "date_created"
+            }
+          },
+          {
+            "name": "orderByDirection",
+            "in": "query",
+            "description": "Direction to order results by",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"],
+              "default": "desc"
+            }
           }
         ],
-        "description": "this endpoint returns a collection containing basic information about the different types of executors that can be used to execute jobs",
+        "description": "Returns a paginated list of job executors for the account. Supports ordering by various fields and filtering.",
         "operationId": "Executors.get",
         "responses": {
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -356,7 +643,7 @@
             "$ref": "#/components/responses/404"
           },
           "200": {
-            "description": "a collection of all the stats for jobs executed",
+            "description": "successfully returned job executors",
             "content": {
               "application/json": {
                 "schema": {
@@ -389,6 +676,9 @@
           }
         },
         "responses": {
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -397,6 +687,24 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "description": "Unprocessable Entity - Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "201": {
             "description": "successfully created a single executor",
@@ -428,6 +736,9 @@
           }
         ],
         "responses": {
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -476,6 +787,9 @@
           }
         },
         "responses": {
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -484,6 +798,24 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "422": {
+            "description": "Unprocessable Entity - Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           },
           "200": {
             "description": "successfully updated a single executor",
@@ -513,6 +845,9 @@
         "summary": "Delete an executor",
         "operationId": "Executors.delete",
         "responses": {
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -717,7 +1052,21 @@
         ],
         "summary": "Delete a single project",
         "operationId": "Projects.delete",
+        "requestBody": {
+          "description": "request body to delete a project",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectDeleteRequestBody"
+              }
+            }
+          }
+        },
         "responses": {
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -728,7 +1077,7 @@
             "$ref": "#/components/responses/404"
           },
           "204": {
-            "description": "successfully deleted a single project"
+            "description": "successfully deleted a single project and all its jobs"
           }
         }
       }
@@ -960,7 +1309,7 @@
     "/api/v1/healthcheck": {
       "get": {
         "summary": "Healthcheck Endpoint",
-        "description": "Returns current leader and raft stats.",
+        "description": "Returns current leader and raft stats. No authentication required.",
         "responses": {
           "200": {
             "description": "Healthcheck data",
@@ -1094,12 +1443,13 @@
         }
       }
     },
-    "/api/v1/async-tasks/{requestId}": {
+    "/api/v1/async-tasks/{id}": {
       "get": {
         "tags": [
           "AsyncTasks"
         ],
         "summary": "Get a single async task",
+        "description": "Retrieves an async task by request ID. If the task is not completed, this endpoint will block until the task finishes or the request times out. Returns the task immediately if already completed.",
         "security": [{
           "ApiKeyAuth": [],
           "ApiSecretAuth": []
@@ -1109,15 +1459,19 @@
             "$ref": "#/components/parameters/accountId"
           },
           {
-            "name": "requestId",
+            "name": "id",
             "in": "path",
             "required": true,
+            "description": "Request ID of the async task",
             "schema": {
               "type": "string"
             }
           }
         ],
         "responses": {
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -1194,9 +1548,147 @@
         "type": "apiKey",
         "in": "header",
         "name": "x-secret-key"
+      },
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Basic authentication for peer-to-peer communication"
       }
     },
     "schemas": {
+      "Account": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the account"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountFeature"
+            },
+            "description": "List of features enabled for this account"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the account was created"
+          },
+          "dateModified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the account was last modified"
+          }
+        },
+        "required": ["id", "name", "features", "dateCreated"]
+      },
+      "AccountCreateRequestBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the account to create"
+          }
+        },
+        "required": ["name"]
+      },
+      "AccountResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Account"
+          }
+        }
+      },
+      "AccountFeature": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the account"
+          },
+          "featureId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the feature"
+          },
+          "feature": {
+            "type": "string",
+            "description": "Name of the feature"
+          }
+        },
+        "required": ["accountId", "featureId", "feature"]
+      },
+      "Feature": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the feature"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the feature"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the feature was created"
+          },
+          "dateModified": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the feature was last modified"
+          }
+        },
+        "required": ["id", "name", "dateCreated"]
+      },
+      "FeatureRequest": {
+        "type": "object",
+        "properties": {
+          "featureId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the feature to add or remove"
+          }
+        },
+        "required": ["featureId"]
+      },
+      "FeatureRequestResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/FeatureRequest"
+          }
+        }
+      },
+      "FeaturesResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Feature"
+            }
+          }
+        }
+      },
       "Credential": {
         "type": "object",
         "properties": {
@@ -1306,7 +1798,7 @@
           },
           "executionVersion": {
             "type": "number",
-            "description": "the version of the execution that was executed"
+            "description": "URL of the cloud resource"
           },
           "logs": {
             "type": "string",
@@ -1334,11 +1826,14 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "number",
-            "description": "id of the execution log"
+            "type": "integer",
+            "format": "int64",
+            "description": "id of the executor"
           },
           "accountId": {
-            "type": "string"
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the account that owns this executor"
           },
           "name": {
             "type": "string",
@@ -1363,7 +1858,7 @@
           },
           "cloudResourceUrl": {
             "type": "string",
-            "description": "the version of the execution that was executed"
+            "description": "URL of the cloud resource"
           },
           "cloudApiKey": {
             "type": "string",
@@ -1386,39 +1881,32 @@
             "description": "HTTP method for webhook execution",
             "enum": ["GET", "POST", "PUT", "DELETE"]
           },
-          "webhookHeaders": {
-            "type": "string",
-            "description": "Headers for webhook execution"
-          },
-          "webhookBody": {
-            "type": "string",
-            "description": "Body for webhook execution"
-          },
-          "webhookTimeout": {
-            "type": "integer",
-            "description": "Timeout in seconds for webhook execution"
-          },
-          "webhookRetries": {
-            "type": "integer",
-            "description": "Number of retries for webhook execution"
-          },
           "dateCreated": {
-            "type": "string"
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the executor was created"
           },
           "dateModified": {
-            "type": "string"
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the executor was last modified"
           },
           "dateDeleted": {
-            "type": "string"
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the executor was deleted"
           },
           "createdBy": {
-            "type": "string"
+            "type": "string",
+            "description": "User who created the executor"
           },
           "modifiedBy": {
-            "type": "string"
+            "type": "string",
+            "description": "User who last modified the executor"
           },
           "deletedBy": {
-            "type": "string"
+            "type": "string",
+            "description": "User who deleted the executor"
           }
         },
         "additionalProperties": false
@@ -1461,7 +1949,7 @@
           },
           "cloudResourceUrl": {
             "type": "string",
-            "description": "the version of the execution that was executed"
+            "description": "URL of the cloud resource"
           },
           "cloudApiKey": {
             "type": "string",
@@ -1483,22 +1971,6 @@
             "type": "string",
             "description": "HTTP method for webhook execution",
             "enum": ["GET", "POST", "PUT", "DELETE"]
-          },
-          "webhookHeaders": {
-            "type": "string",
-            "description": "Headers for webhook execution"
-          },
-          "webhookBody": {
-            "type": "string",
-            "description": "Body for webhook execution"
-          },
-          "webhookTimeout": {
-            "type": "integer",
-            "description": "Timeout in seconds for webhook execution"
-          },
-          "webhookRetries": {
-            "type": "integer",
-            "description": "Number of retries for webhook execution"
           }
         }
       },
@@ -1528,7 +2000,7 @@
           },
           "cloudResourceUrl": {
             "type": "string",
-            "description": "the version of the execution that was executed"
+            "description": "URL of the cloud resource"
           },
           "cloudApiKey": {
             "type": "string",
@@ -1550,22 +2022,6 @@
             "type": "string",
             "description": "HTTP method for webhook execution",
             "enum": ["GET", "POST", "PUT", "DELETE"]
-          },
-          "webhookHeaders": {
-            "type": "string",
-            "description": "Headers for webhook execution"
-          },
-          "webhookBody": {
-            "type": "string",
-            "description": "Body for webhook execution"
-          },
-          "webhookTimeout": {
-            "type": "integer",
-            "description": "Timeout in seconds for webhook execution"
-          },
-          "webhookRetries": {
-            "type": "integer",
-            "description": "Number of retries for webhook execution"
           }
         }
       },
@@ -1573,61 +2029,91 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "description": "id for job"
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the job"
           },
           "accountId": {
-            "type": "string"
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the account that owns this job"
           },
           "projectId": {
-            "type": "string",
-            "description": "project id in which job belongs too"
-          },
-          "description": {
-            "type": "string",
-            "description": "the description "
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the project this job belongs to"
           },
           "executorId": {
-            "type": "string",
-            "description": "the id for the job executor"
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the job executor"
           },
           "data": {
             "type": "string",
-            "description": "payload about the job to supply to job executor"
+            "description": "Payload data for the job executor"
           },
           "spec": {
             "type": "string",
-            "description": "Spec can be a cron tab e.g (0 30 * * * *)  or pre-defined values like (@hourly, @daily, @midnight, @weekly, @monthly, @yearly, @annually) or intervals @every <duration> for example (@every 1h30m10s)"
+            "description": "Cron specification for job scheduling (e.g., '0 30 * * * *', '@hourly', '@every 1h30m10s')"
           },
           "startDate": {
             "type": "string",
-            "description": "The start date for the job"
+            "format": "date-time",
+            "description": "Start date for the job execution"
           },
           "endDate": {
             "type": "string",
-            "description": "The end date for the job"
+            "format": "date-time",
+            "description": "End date for the job execution"
+          },
+          "lastExecutionDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last date when the job was executed"
           },
           "timezone": {
             "type": "string",
-            "description": "The timezone for the job"
+            "description": "Timezone for the job (e.g., 'UTC', 'America/New_York')"
+          },
+          "timezoneOffset": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Timezone offset in seconds"
+          },
+          "retryMax": {
+            "type": "integer",
+            "description": "Maximum number of retries for failed executions"
+          },
+          "executionId": {
+            "type": "string",
+            "description": "Unique execution ID for this job run"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "inactive"],
+            "description": "Current status of the job"
           },
           "dateCreated": {
-            "type": "string"
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the job was created"
           },
           "dateModified": {
-            "type": "string"
-          },
-          "dateDeleted": {
-            "type": "string"
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the job was last modified"
           },
           "createdBy": {
-            "type": "string"
+            "type": "string",
+            "description": "User who created the job"
           },
           "modifiedBy": {
-            "type": "string"
+            "type": "string",
+            "description": "User who last modified the job"
           },
           "deletedBy": {
-            "type": "string"
+            "type": "string",
+            "description": "User who deleted the job"
           }
         }
       },
@@ -1638,32 +2124,50 @@
           "required": ["projectId", "timezone"],
           "properties": {
             "projectId": {
-              "type": "string",
-              "description": "project id in which job belongs too"
-            },
-            "description": {
-              "type": "string"
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the project this job belongs to"
             },
             "timezone": {
               "type": "string",
-              "description": "The timezone for the job (e.g., 'UTC', 'America/New_York')"
-            },
-            "callbackUrl": {
-              "type": "string"
-            },
-            "startDate": {
-              "type": "string"
-            },
-            "endDate": {
-              "type": "string"
+              "description": "Timezone for the job (e.g., 'UTC', 'America/New_York')"
             },
             "executorId": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the job executor"
+            },
+            "data": {
               "type": "string",
-              "description": "the id for the job executor"
+              "description": "Payload data for the job executor"
             },
             "spec": {
               "type": "string",
-              "description": "Spec can be a cron tab e.g (0 30 * * * *)  or pre-defined values like (@hourly, @daily, @midnight, @weekly, @monthly, @yearly, @annually) or intervals @every <duration> for example (@every 1h30m10s)"
+              "description": "Cron specification for job scheduling (e.g., '0 30 * * * *', '@hourly', '@every 1h30m10s')"
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Start date for the job execution"
+            },
+            "endDate": {
+              "type": "string",
+              "format": "date-time",
+              "description": "End date for the job execution"
+            },
+            "timezoneOffset": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Timezone offset in seconds"
+            },
+            "retryMax": {
+              "type": "integer",
+              "description": "Maximum number of retries for failed executions"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["active", "inactive"],
+              "description": "Current status of the job"
             }
           }
         }
@@ -1672,20 +2176,50 @@
         "type": "object",
         "properties": {
           "projectId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the project this job belongs to"
+          },
+          "executorId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the job executor"
+          },
+          "data": {
             "type": "string",
-            "description": "project id in which job belongs too"
+            "description": "Payload data for the job executor"
           },
           "spec": {
             "type": "string",
-            "description": "Spec can be a cron tab e.g (0 30 * * * *)  or pre-defined values like (@hourly, @daily, @midnight, @weekly, @monthly, @yearly, @annually) or intervals @every <duration> for example (@every 1h30m10s)"
+            "description": "Cron specification for job scheduling (e.g., '0 30 * * * *', '@hourly', '@every 1h30m10s')"
           },
-          "callbackUrl": {
+          "startDate": {
             "type": "string",
-            "description": "URL in which job would execute"
+            "format": "date-time",
+            "description": "Start date for the job execution"
           },
-          "executorId": {
+          "endDate": {
             "type": "string",
-            "description": "the id for the job executor"
+            "format": "date-time",
+            "description": "End date for the job execution"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone for the job (e.g., 'UTC', 'America/New_York')"
+          },
+          "timezoneOffset": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Timezone offset in seconds"
+          },
+          "retryMax": {
+            "type": "integer",
+            "description": "Maximum number of retries for failed executions"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "inactive"],
+            "description": "Current status of the job"
           }
         }
       },
@@ -1716,8 +2250,9 @@
           "description": {
             "type": "string"
           },
-          "date_created": {
-            "type": "string"
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -1737,6 +2272,16 @@
         "properties": {
           "description": {
             "type": "string"
+          }
+        }
+      },
+      "ProjectDeleteRequestBody": {
+        "type": "object",
+        "required": ["deletedBy"],
+        "properties": {
+          "deletedBy": {
+            "type": "string",
+            "description": "The ID of the user who is deleting the project (e.g., Clerk user ID)"
           }
         }
       },

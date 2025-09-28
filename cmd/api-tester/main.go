@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -75,7 +76,8 @@ func main() {
 
 	// Update project
 	fmt.Println("\nUpdating project...")
-	err = UpdateProject(*host, *apiKey, *apiSecret, *accountID, project.ID, "Updated description")
+	projectID, _ := strconv.ParseInt(project.ID, 10, 64)
+	err = UpdateProject(*host, *apiKey, *apiSecret, *accountID, projectID, "Updated description")
 	if err != nil {
 		fmt.Printf("Error updating project: %v\n", err)
 		os.Exit(1)
@@ -89,12 +91,9 @@ func main() {
 	executor := ExecutorCreateRequest{
 		Name:           "Test Webhook Executor",
 		Type:           "webhook_url",
-		WebhookUrl:     "http://localhost:3000/webhook",
+		WebhookURL:     "http://localhost:3000/webhook",
 		WebhookMethod:  "POST",
 		WebhookHeaders: "Content-Type: application/json",
-		WebhookBody:    `{"message": "test"}`,
-		WebhookTimeout: 30,
-		WebhookRetries: 3,
 	}
 	createdExecutor, err := CreateExecutor(*host, *apiKey, *apiSecret, *accountID, executor)
 	if err != nil {
@@ -126,12 +125,9 @@ func main() {
 	updateRequest := ExecutorUpdateRequest{
 		Name:           "Updated Webhook Executor",
 		Type:           "webhook_url",
-		WebhookUrl:     "http://localhost:3000/webhook/updated",
+		WebhookURL:     "http://localhost:3000/webhook/updated",
 		WebhookMethod:  "POST",
 		WebhookHeaders: "Content-Type: application/json",
-		WebhookBody:    `{"message": "updated"}`,
-		WebhookTimeout: 60,
-		WebhookRetries: 5,
 	}
 	err = UpdateExecutor(*host, *apiKey, *apiSecret, *accountID, fmt.Sprintf("%d", createdExecutor.ID), updateRequest)
 	if err != nil {
@@ -146,20 +142,22 @@ func main() {
 	fmt.Println("\nCreating jobs...")
 	jobs := []JobCreateRequest{
 		{
-			ProjectID:   project.ID,
-			Description: "Test Job 1",
-			CallbackUrl: "http://localhost:3000/callback",
-			Spec:        "*/5 * * * *",
-			Timezone:    "UTC",
-			ExecutorID:  createdExecutor.ID,
+			ProjectID:  projectID,
+			Data:       "Test Job 1",
+			Spec:       "*/5 * * * *",
+			StartDate:  "2024-01-01T00:00:00Z",
+			EndDate:    "2024-12-31T23:59:59Z",
+			Timezone:   "UTC",
+			ExecutorID: &createdExecutor.ID,
 		},
 		{
-			ProjectID:   project.ID,
-			Description: "Test Job 2",
-			CallbackUrl: "http://localhost:3000/callback",
-			Spec:        "*/10 * * * *",
-			Timezone:    "UTC",
-			ExecutorID:  createdExecutor.ID,
+			ProjectID:  projectID,
+			Data:       "Test Job 2",
+			Spec:       "*/10 * * * *",
+			StartDate:  "2024-01-01T00:00:00Z",
+			EndDate:    "2024-12-31T23:59:59Z",
+			Timezone:   "UTC",
+			ExecutorID: &createdExecutor.ID,
 		},
 	}
 	createdJobs, err := CreateJobs(*host, *apiKey, *apiSecret, *accountID, jobs)
@@ -171,7 +169,7 @@ func main() {
 
 	// Get all jobs
 	fmt.Println("\nGetting all jobs...")
-	allJobs, err := GetAllJobs(*host, *apiKey, *apiSecret, *accountID, project.ID, 10, 0)
+	allJobs, err := GetAllJobs(*host, *apiKey, *apiSecret, *accountID, projectID, 10, 0)
 	if err != nil {
 		fmt.Printf("Error getting jobs: %v\n", err)
 		os.Exit(1)
@@ -216,7 +214,7 @@ func main() {
 
 	// Delete project
 	fmt.Println("\nDeleting project...")
-	err = DeleteProject(*host, *apiKey, *apiSecret, *accountID, project.ID)
+	err = DeleteProject(*host, *apiKey, *apiSecret, *accountID, projectID)
 	if err != nil {
 		fmt.Printf("Error deleting project: %v\n", err)
 		os.Exit(1)
